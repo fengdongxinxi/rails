@@ -1,3 +1,21 @@
+*   Deprecate implicit coercion of `ActiveSupport::Duration`
+
+    Currently `ActiveSupport::Duration` implicitly converts to a seconds
+    value when used in a calculation except for the explicit examples of
+    addition and subtraction where the duration is the receiver.
+
+    This results in lots of confusion especially when using durations
+    with dates because adding/subtracting a value from a date treats
+    integers as a day and not a second.
+
+    As part of this deprecation add `*` and `/` methods to `AS::Duration`
+    so that calculations that keep the duration as the receiver work
+    correctly whether the final receiver is a `Date` or `Time.
+
+    Fixes #27457.
+
+    *Andrew White*
+
 *   Add `ActiveSupport::Duration#before` and `#after` as aliases for `#until` and `#since`
 
     These read more like English and require less mental gymnastics to read and write.
@@ -20,7 +38,7 @@
     *Robin Dupret* (#28157)
 
 *   In Core Extensions, make `MarshalWithAutoloading#load` pass through the second, optional
-    argument for `Marshal#load( source [, proc] )`. This way we don't have to do 
+    argument for `Marshal#load( source [, proc] )`. This way we don't have to do
     `Marshal.method(:load).super_method.call(source, proc)` just to be able to pass a proc.
 
     *Jeff Latz*
